@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link rel="stylesheet" href="/style.css">
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('formCtrl', function($scope, $http, $timeout) {
+      
+      $scope.tempData = [];
+     
+     
+      $scope.checkVal = function(){
+            $timeout(function () {
+              $scope.tempData = [];
+              console.log("New Data",$scope.tempData);
+            }, 600000);
+
+      }
+    
+        $scope.getWeather = function(a)
+        {
+                $http.get("http://api.openweathermap.org/data/2.5/weather?q="+a+"&appid=094aa776d64c50d5b9e9043edd4ffd00")
+                .then(function(response) {
+                    console.log("response",response.data)
+                    $scope.city = response.data.name;
+                    $scope.maxTemp = response.data.main.temp_max;
+                    $scope.minTemp = response.data.main.temp_min;
+                   $scope.timeDate = new Date();
+
+                   var temp = {
+                     "city": $scope.city,
+                     "maxTemp":$scope.maxTemp,
+                     "minTemp":$scope.minTemp,
+                     "timeDate": $scope.timeDate
+                   }
+                   $scope.tempData.push(temp);
+                });
+                console.log($scope.tempData);
+
+            }  
+            $scope.checkVal();
+    
+    });
+    </script>
+
+<body>
+
+<div ng-app="myApp" ng-controller="formCtrl" >
+ <h1>Weather App</h1>
+  <br/>
+
+ 
+
+    <form>
+    City Name: <input type="text" list="browsers"  ng-model="cityName" >
+    <datalist id="browsers" ng-repeat="c in tempData">
+      <option value="{{c.city}}" >
+
+    </datalist>
+    <button ng-click="getWeather(cityName)">Check</button>
+  </form><br/>
+
+  <div ng-show="cityName" ng-repeat="c in tempData | filter:cityName">
+      <p>City Name -  {{c.city}}</p>
+      <p>Max Temp - {{c.maxTemp}}</p>
+      <p>Min Temp - {{c.minTemp}}</p>
+      <p>Search Time - {{c.timeDate | date:'mediumTime'}}</p>
+  </div>
+
+</div>
+
+
+
+</body>
+</html>
