@@ -21,7 +21,7 @@
     
         $scope.getWeather = function(a)
         {
-                $http.get("http://api.openweathermap.org/data/2.5/weather?q="+a+"&appid=094aa776d64c50d5b9e9043edd4ffd00")
+                $http.get("http://api.openweathermap.org/data/2.5/weather?q="+a+"&appid=xxxx")
                 .then(function(response) {
                     console.log("response",response.data)
                     $scope.city = response.data.name;
